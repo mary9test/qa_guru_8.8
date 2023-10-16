@@ -59,3 +59,38 @@ class TestCart:
         cart.add_product(product, 10)
         assert product in cart.products
         assert cart.products[product] == 10
+
+    def test_remove_product(self, cart, product):
+        cart.add_product(product, 10)
+        cart.remove_product(product, 1)
+        assert cart.products[product] == 9
+
+    def test_remove_all_products(self, cart, product):
+        cart.add_product(product, 10)
+        cart.remove_product(product)
+        assert not cart.products
+
+    def test_remove_products_more_than_in_cart(self, cart, product):
+        cart.add_product(product, 6)
+        cart.remove_product(product, 7)
+        assert not cart.products
+
+    def test_clear_cart(self, product, cart):
+        cart.add_product(product, 1)
+        cart.clear()
+        assert not cart.products
+
+    def test_get_total_price(self, product, cart):
+        cart.add_product(product, 1)
+        assert cart.get_total_price() == 100
+
+    def test_buy(self, cart, product):
+        cart.add_product(product, 10)
+        cart.buy()
+        assert product.quantity == 990
+        assert not cart.products
+
+    def test_buy_more_than_quantity(self, cart, product):
+        cart.add_product(product, 1200)
+        with pytest.raises(ValueError):
+            cart.buy()
