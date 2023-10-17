@@ -92,7 +92,3 @@ class Cart:
                 raise ValueError
             product.quantity -= quantity
         self.products.clear()
-
-
-
-

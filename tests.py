@@ -11,6 +11,11 @@ def product():
     return Product("book", 100, "This is a book", 1000)
 
 
+@pytest.fixture
+def second_product():
+    return Product("notebook", 50, "This is a notebook", 800)
+
+
 class TestProducts:
     """
     Тестовый класс - это способ группировки ваших тестов по какой-то тематике
@@ -30,11 +35,9 @@ class TestProducts:
     def test_product_check_quantity_equal(self, product):
         assert product.check_quantity(1000) is True
 
-
     def test_product_buy(self, product):
         product.buy(999)
         assert product.quantity == 1
-
 
     def test_product_buy_more_than_available(self, product):
         # TODO напишите проверки на метод buy,
@@ -55,7 +58,7 @@ class TestCart:
     def cart(self):
         return Cart()
 
-    def test_add_product(self, cart):
+    def test_add_product(self, cart, product):
         cart.add_product(product, 10)
         assert product in cart.products
         assert cart.products[product] == 10
@@ -80,9 +83,10 @@ class TestCart:
         cart.clear()
         assert not cart.products
 
-    def test_get_total_price(self, product, cart):
+    def test_get_total_price(self, product, second_product, cart):
         cart.add_product(product, 1)
-        assert cart.get_total_price() == 100
+        cart.add_product(second_product, 5)
+        assert cart.get_total_price() == 350
 
     def test_buy(self, cart, product):
         cart.add_product(product, 10)
